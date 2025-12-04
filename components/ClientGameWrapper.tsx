@@ -86,9 +86,9 @@ export default function ClientGameWrapper() {
         </div>
       )}
 
-      {/* SAVING OVERLAY */}
+      {/* SAVING OVERLAY - Increased Z-Index to 100 */}
       {isSaving && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 modal-overlay">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 modal-overlay">
           <div className="bg-white p-6 rounded-xl max-w-md w-full flex flex-col items-center text-center m-4">
             <h3 className="text-xl font-bold mb-2">Saving Score...</h3>
             <div className="loader mb-6"></div>
@@ -103,37 +103,54 @@ export default function ClientGameWrapper() {
         </div>
       )}
 
-      {/* LEADERBOARD MODAL */}
+      {/* LEADERBOARD MODAL - Increased Z-Index to 100 and added Solid Backgrounds */}
       {showLeaderboard && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 modal-overlay backdrop-blur-sm">
-            <div className="bg-white w-full max-w-md rounded-xl shadow-2xl overflow-hidden m-4 flex flex-col max-h-[80vh]">
-                <div className="p-4 bg-green-600 text-white flex justify-between items-center">
-                    <h2 className="text-xl font-bold">🏆 Hall of Fame</h2> &nbsp;&nbsp;
-                    <button onClick={() => setShowLeaderboard(false)} className="text-2xl leading-none">&times;</button>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 modal-overlay backdrop-blur-sm">
+            <div className="bg-white w-full max-w-md rounded-xl shadow-2xl overflow-hidden m-4 flex flex-col max-h-[80vh] border border-gray-200">
+                {/* Header */}
+                <div className="p-4 bg-green-600 text-white flex justify-between items-center z-10 shadow-sm">
+                    <h2 className="text-xl font-bold">🏆 Hall of Fame</h2>
+                    <button onClick={() => setShowLeaderboard(false)} className="text-3xl leading-none hover:text-green-200 font-bold">&times;</button>
                 </div>
-                <div className="p-4 overflow-y-auto flex-1">
+                
+                {/* Body with Solid Background */}
+                <div className="p-0 overflow-y-auto flex-1 bg-white">
                     {loadingLeaderboard ? (
-                        <div className="flex justify-center p-8"><div className="loader"></div></div> 
+                        <div className="flex justify-center p-8 bg-white"><div className="loader"></div></div> 
                     ) : (
-                        <table className="w-full text-left">
-                            <thead className="bg-gray-50 text-gray-600 text-sm">
+                        <table className="w-full text-left border-collapse bg-white">
+                            <thead className="bg-gray-100 text-gray-600 text-sm sticky top-0 shadow-sm">
                                 <tr>
-                                    <th className="p-2">#</th>
-                                    <th className="p-2">Name</th>
-                                    <th className="p-2 text-right">Score</th>
+                                    <th className="p-3 border-b">#</th>
+                                    <th className="p-3 border-b">Name</th>
+                                    <th className="p-3 border-b text-right">Score</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y">
+                            <tbody className="divide-y divide-gray-100">
                                 {leaderboardData.map((e, i) => (
-                                    <tr key={e.id}>
-                                        <td className="p-3">#{i+1}</td>
-                                        <td className="p-3 font-medium">{e.username}</td>
-                                        <td className="p-3 text-right font-bold text-green-700">{e.score}</td>
+                                    <tr key={e.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                        <td className="p-3 text-gray-500 font-bold">
+                                            {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`}
+                                        </td>
+                                        <td className="p-3 font-medium text-gray-800">{e.username}</td>
+                                        <td className="p-3 text-right font-bold text-green-700 font-mono text-lg">{e.score}</td>
                                     </tr>
                                 ))}
+                                {leaderboardData.length === 0 && (
+                                    <tr>
+                                        <td colSpan={3} className="p-8 text-center text-gray-400">
+                                            No scores yet. Be the first!
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     )}
+                </div>
+                
+                {/* Footer Ad Space placeholder inside modal */}
+                <div className="p-2 bg-gray-100 border-t flex justify-center">
+                    <span className="text-[10px] text-gray-400">Ad Space</span>
                 </div>
             </div>
         </div>
