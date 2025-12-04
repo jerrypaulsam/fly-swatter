@@ -108,7 +108,7 @@ export default function ClientGameWrapper() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 modal-overlay backdrop-blur-sm">
             <div className="bg-white w-full max-w-md rounded-xl shadow-2xl overflow-hidden m-4 flex flex-col max-h-[80vh]">
                 <div className="p-4 bg-green-600 text-white flex justify-between items-center">
-                    <h2 className="text-xl font-bold">🏆 Hall of Fame</h2>
+                    <h2 className="text-xl font-bold">🏆 Hall of Fame</h2> &nbsp;&nbsp;
                     <button onClick={() => setShowLeaderboard(false)} className="text-2xl leading-none">&times;</button>
                 </div>
                 <div className="p-4 overflow-y-auto flex-1">
