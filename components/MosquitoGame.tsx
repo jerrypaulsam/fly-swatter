@@ -99,18 +99,41 @@ export default function MosquitoGame({
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => setIsMounted(true), []);
 
-  // Timer
+  // --- FIX START: Separate Refs and Effects for Timer ---
+  
+  // Keep track of score in a Ref so the Timer effect doesn't restart when score changes
+  const scoreRef = useRef(score);
+  useEffect(() => { scoreRef.current = score; }, [score]);
+
+  // 1. Timer Countdown Effect (Only runs when isActive changes)
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isActive && timeLeft > 0) {
-      interval = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
-    } else if (timeLeft === 0) {
+    if (!isActive) return;
+
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        // Stop timer at 0
+        if (prev <= 1) {
+            clearInterval(interval);
+            return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isActive]);
+
+  // 2. Game Over Check Effect (Runs when time hits 0)
+  useEffect(() => {
+    if (timeLeft === 0 && isActive) {
       setIsActive(false);
       setMosquitoes([]); 
-      onGameOver(score);
+      // Use the Ref to get the latest score without breaking dependencies
+      onGameOver(scoreRef.current);
     }
-    return () => clearInterval(interval);
-  }, [isActive, timeLeft, onGameOver, score]);
+  }, [timeLeft, isActive, onGameOver]);
+  
+  // --- FIX END ---
 
   // Spawner
   useEffect(() => {
@@ -215,7 +238,7 @@ export default function MosquitoGame({
         onClick={handleContainerClick}
         style={{ touchAction: 'none' }} 
       >
-        {/* --- START OVERLAY (Updated to Big Red Button) --- */}
+        {/* --- START OVERLAY (Big Red Button) --- */}
         {!isActive && (
             <div className="absolute inset-0 w-full h-full z-50 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
                 
@@ -278,7 +301,7 @@ export default function MosquitoGame({
       </div>
 
       <div className="w-full max-w-2xl mt-3 px-4 text-center">
-        <p className="text-gray-400 text-xs uppercase tracking-widest">Tap quickly to swat • Avoid missing</p>
+        <p className="text-gray-400 text-xs uppercase tracking-widest">Tap quickly to swat • Avoid missing • Be a legendary swatter</p>
       </div>
     </div>
   );
