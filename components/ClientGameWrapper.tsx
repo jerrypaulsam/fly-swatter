@@ -27,7 +27,7 @@ export default function ClientGameWrapper() {
     
     try {
         const data = await getLeaderboard();
-        // --- FIX IS HERE: We cast 'data' to 'any' to satisfy TypeScript ---
+        // --- FIX: Force TypeScript to accept the data ---
         setLeaderboardData(data as any); 
     } catch (e) {
         console.error("Failed to load leaderboard", e);
@@ -61,7 +61,6 @@ export default function ClientGameWrapper() {
           {/* AD SLOT: Game Over */}
           <div className="w-full flex justify-center mb-4 bg-gray-50 border p-2">
             <span className="text-xs text-gray-400 block mb-1">Ad</span>
-            {/* Replace with your specific Slot ID */}
             <AdUnit slotId="YOUR_GAME_OVER_AD_ID" format="rectangle" />
           </div>
 
