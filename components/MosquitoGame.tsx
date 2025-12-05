@@ -223,6 +223,7 @@ export default function MosquitoGame({
             <span className={`px-4 py-1 rounded-full border text-lg md:text-xl shadow-sm ${timeLeft < 10 ? 'bg-red-100 text-red-600 border-red-300 animate-pulse' : 'bg-white text-gray-700 border-gray-300'}`}>
                 ⏱ {timeLeft}s
             </span>
+            &nbsp;
             {!isActive && (
                 <button onClick={onOpenScoreboard} className="text-xs md:text-sm bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition shadow-md font-bold uppercase tracking-wide">
                     🏆 Ranks
